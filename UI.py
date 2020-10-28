@@ -1,51 +1,50 @@
-import sys
-from PyQt5 import  QtWidgets,QtCore
+from PyQt5 import QtWidgets, QtCore
 
-from openni import openni2
 
-class MyPlayerWindow(QtWidgets.QMainWindow):
-    def __init__(self,title):
+
+
+class MyAppWindow(QtWidgets.QWidget):
+    def __init__(self, parent=None):
         super().__init__()
-        self.setGeometry(350,350,350, 350)
-        self.init_ui_elements(title)
-
-
-    def init_ui_elements(self, title):
-        self.setWindowTitle(title)
-        self.textEdit = QtWidgets.QTextEdit()
-        self.setCentralWidget(self.textEdit)
-        self.statusBar()
-        open_file = QtWidgets.QAction('Open', self)
-        open_file.setShortcut("Ctrl+O")
-        open_file.setStatusTip("Open new file")
-        open_file.triggered.connect(self.show_open_file())
-        menu_bar = self.menuBar()
-        file_menu = menu_bar.addMenu('&File')
-        file_menu.addAction(self.show_open_file())
-        self.setGeometry(300,300,350,350)
-        self.setWindowTitle('File dialog')
-        self.show()
-        ##self.btnPlay = QtWidgets.QPushButton("&Play video")
-        #self.init_ui_elements()
-        #self.vbox = QtWidgets.QVBoxLayout()
-        #self.vbox.addWidget(self.btnPlay)
-       ## self.setLayout(self.vbox)
-        #openBtn = QtWidgets.QPushButton('Open Video')
-        #openBtn.clicked.connect(self.open_file)
-
-
-    def rerutn_file_path(self):
-        filename = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file', '/home')[0]
-        f = open(filename, 'r')
-
-        with f:
-            data = f.read()
-            self.textEdit.setText(data)
-
-        #self.mediaPlayer.setMedia(QtWidgets.QMediaContent(QtCore.QUrl.fromLocalFile((filename[0]))))
-        #self.playBtn.setEnabled(True)
-
-
-
-
-
+        self.label = QtWidgets.QLabel("This test text")
+        self.label.setAlignment(QtCore.Qt.AlignHCenter)
+        self.button_open_file = QtWidgets.QPushButton("&Open file")
+        self.btnQuit = QtWidgets.QPushButton("&Close app")
+        self.button_fast_reverse = QtWidgets.QPushButton("&Fast reverse")
+        self.button_fast_reverse.setDisabled(True)
+        self.button_play = QtWidgets.QPushButton("&Play video")
+        self.button_pause = QtWidgets.QPushButton("&Pause")
+        self.button_pause.setDisabled(True)
+        self.button_fast_forward = QtWidgets.QPushButton("&Fast forward")
+        self.button_fast_forward.setDisabled(True)
+        self.vbox = QtWidgets.QVBoxLayout()
+        self.vbox.addWidget(self.label)
+        self.vbox.addWidget(self.button_open_file)
+        self.button_open_file.clicked.connect(self.open_file)
+        self.vbox.addWidget(self.button_fast_reverse)
+        self.button_fast_reverse.clicked.connect(self.fast_reserve)
+        self.vbox.addWidget(self.button_play)
+        self.button_play.clicked.connect(self.play_video)
+        self.vbox.addWidget(self.button_pause)
+        self.button_pause.clicked.connect(self.set_pause)
+        self.vbox.addWidget(self.button_fast_forward)
+        self.button_fast_forward.clicked.connect(self.fast_forward)
+        self.vbox.addWidget(self.btnQuit)
+        self.setLayout(self.vbox)
+        self.btnQuit.clicked.connect(QtWidgets.qApp.quit)
+    def open_file(self):
+        print('opened file')
+    def fast_reserve(self):
+        print('fast reserved')
+    def play_video(self):
+        self.button_pause.setDisabled(False)
+        self.button_play.setDisabled(True)
+        print('playing video')
+    def set_pause(self):
+        self.button_play.setDisabled(False)
+        self.button_pause.setDisabled(True)
+        self.button_fast_reverse.setDisabled(False)
+        self.button_fast_forward.setDisabled(False)
+        print('stop video')
+    def fast_forward(self):
+        print('fast forwarded')
