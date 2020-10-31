@@ -68,12 +68,14 @@ class MyAppWindow(QtWidgets.QWidget):
         self.oni = oni
         self.frame_item = 0
         self.Tostop = False
+
     def read_frames(self):
         print('reading')
         print(self.frame_item)
         limit = (self.oni.get_frames_number())
         for i in range(self.frame_item, limit + 1, 1):
             if not (self.Tostop):
+                # TODO : move to a separate function
                 self.oni.get_frame_by_id(i)
                 data_img = self.oni.get_frame_by_id(i)[0]
                 height, width, channel = data_img.shape
@@ -99,7 +101,7 @@ class MyAppWindow(QtWidgets.QWidget):
        # self.item.setPixmap(pix)
         #QtCore.QThread.msleep(5)
         self.scene.addItem(self.item)
-        self.viewer.repaint()
+        self.viewer.update()
         QtWidgets.QApplication.processEvents()
         #self.viewer.setScene(self.scene)
         #self.scene.addPixmap(pix)
@@ -115,6 +117,14 @@ class MyAppWindow(QtWidgets.QWidget):
         #self.scene.changed.connect(self.fast_reserve)
 
     def fast_reserve(self):
+        self.frame_item -= 1
+        self.oni.get_frame_by_id(self.frame_item)
+        data_img = self.oni.get_frame_by_id(self.frame_item)[0]
+        height, width, channel = data_img.shape
+        bytesPerLine = 3 * width
+        qImage = QtGui.QImage(data_img.data, width, height, bytesPerLine, QtGui.QImage.Format_RGB888)
+        print(f'something doing {self.frame_item}')
+        self.imageChange.emit(qImage)
         print('fast reserved')
 
     def play_video(self):
@@ -142,4 +152,12 @@ class MyAppWindow(QtWidgets.QWidget):
         print('stop video')
 
     def fast_forward(self):
+        self.frame_item += 1
+        self.oni.get_frame_by_id(self.frame_item)
+        data_img = self.oni.get_frame_by_id(self.frame_item)[0]
+        height, width, channel = data_img.shape
+        bytesPerLine = 3 * width
+        qImage = QtGui.QImage(data_img.data, width, height, bytesPerLine, QtGui.QImage.Format_RGB888)
+        print(f'something doing {self.frame_item}')
+        self.imageChange.emit(qImage)
         print('fast forwarded')
