@@ -6,15 +6,18 @@ import sys
 import numpy as np
 
 
-path_to_file = "C:/Users/anana/PycharmProjects/TestTask/cap1.oni"
+#path_to_file = "C:/Users/anana/PycharmProjects/TestTask/cap1.oni"
 
 if __name__ == '__main__':
-    my_player_app = QtWidgets.QApplication(sys.argv)
+    my_player_app = QtWidgets.QApplication([])
     window = MyAppWindow()
     window.setWindowTitle("Player for ONI files")
     window.resize(700,500)
-    window.show()
-    sys.exit(my_player_app.exec_())
+    #my_player_app.processEvents()
+    #window.show()
+    #sys.exit(my_player_app.exec_())
+    my_player_app.exec_()
+
 
 
     #apath_to_file = path_to_file.encode('utf-8')
