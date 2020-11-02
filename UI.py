@@ -44,7 +44,7 @@ class MyAppWindow(QtWidgets.QWidget):
         self.button_fast_forward.clicked.connect(self.fast_forward)
         #self.vbox.addWidget(self.btnQuit)
         self.setLayout(self.vbox)
-        QtWidgets.QApplication.processEvents()
+        #QtWidgets.QApplication.processEvents()
         #self.btnQuit.clicked.connect(QtWidgets.qApp.quit)
         self.frame_slider.sliderMoved.connect(self.go_to_frame)
         self.show()

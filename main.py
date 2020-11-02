@@ -8,7 +8,7 @@ if __name__ == '__main__':
     my_player_app = QtWidgets.QApplication([])
     window = MyAppWindow()
     window.setWindowTitle("Player for ONI files")
-    window.resize(700,1000)
+    window.setGeometry(350, 100, 700, 500)
     #my_player_app.processEvents()
     #window.show()
     #sys.exit(my_player_app.exec_())
