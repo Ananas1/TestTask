@@ -33,6 +33,7 @@ class MyAppWindow(QtWidgets.QWidget):
 
         self.vbox.addWidget(self.button_open_file)
         self.button_open_file.clicked.connect(self.open_file)
+        self.button_play.setEnabled(False)
         self.vbox.addWidget(self.button_fast_reverse)
         self.button_fast_reverse.clicked.connect(self.fast_reserve)
         self.vbox.addWidget(self.button_play)
@@ -47,21 +48,20 @@ class MyAppWindow(QtWidgets.QWidget):
         #self.btnQuit.clicked.connect(QtWidgets.qApp.quit)
         self.frame_slider.sliderMoved.connect(self.go_to_frame)
         self.show()
-
+        #self.frame_slider.sliderReleased(self.go_to_frame)
     def open_file(self):
-        filename = (QtWidgets.QFileDialog.getOpenFileName(self, 'Open2 Video'))[0]
-        oni = OniReader(filename)
-        self.oni = oni
-        self.frame_item = 0
-        self.ToStop = False
+        filename = (QtWidgets.QFileDialog.getOpenFileName(self, 'Open2 Video', "*.oni"))[0]
 
-    def go_to_frame(self):
-        self.frame_item = self.frame_slider.value()
-        self.read_frame_by_number(self.frame_item)
-        print(f'My new value = {self.frame_item}')
+        if filename :
+                oni = OniReader(filename)
+                self.oni = oni
+                self.frame_item = 1
+                self.ToStop = False
+                self.button_play.setEnabled(True)
 
     def read_frame_by_number(self, number_of_frame):
         type = 'color'
+        print('im trying read color frame')
         self.oni.get_frame_by_id(number_of_frame)
         data_img = self.oni.get_frame_by_id(number_of_frame)[0]
         height, width, channel = data_img.shape
@@ -84,9 +84,11 @@ class MyAppWindow(QtWidgets.QWidget):
         print('reading')
         print(self.frame_item)
         self.limit = (self.oni.get_frames_number())
+        print(f'limit = {self.limit}')
         for i in range(self.frame_item, self.limit + 1, 1):
-
+            print('Im in cicle')
             if not (self.ToStop):
+                print('im in if')
                 self.read_frame_by_number(i)
                 self.read_depth_frame_by_number(i)
                 self.frame_item += 1
@@ -105,11 +107,20 @@ class MyAppWindow(QtWidgets.QWidget):
 
 
 
-    def  set_frame_slider(self, iter):
+    def set_frame_slider(self, iter):
         self.frame_slider.setMinimum(0)
         self.frame_slider.setMaximum(self.limit)
         self.frame_slider.setValue(iter)
         print(f'Текущее положение слайдера {self.frame_slider.value()}')
+
+    def go_to_frame(self):
+        self.frame_item = self.frame_slider.value()
+        self.ToStop = True
+        self.button_play.setEnabled(True)
+        self.read_frames()
+        #self.read_frame_by_number(self.frame_item)
+        #self.read_depth_frame_by_number(self.frame_item)
+        print(f'My new value = {self.frame_item}')
 
     def fast_reserve(self):
         self.frame_item -= 1
@@ -129,8 +140,6 @@ class MyAppWindow(QtWidgets.QWidget):
         self.button_fast_reverse.setDisabled(False)
         self.button_fast_forward.setDisabled(False)
         self.ToStop = True
-
-
 
     def fast_forward(self):
         self.frame_item += 1

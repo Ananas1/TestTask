@@ -2,11 +2,7 @@ from openni import openni2
 from UI import MyAppWindow
 from OniReaderClass import OniReader
 from PyQt5 import QtWidgets, QtCore
-import sys
-import numpy as np
 
-
-#path_to_file = "C:/Users/anana/PycharmProjects/TestTask/cap1.oni"
 
 if __name__ == '__main__':
     my_player_app = QtWidgets.QApplication([])
