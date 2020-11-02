@@ -11,7 +11,7 @@ class MyAppWindow(QtWidgets.QWidget):
         self.depth_image = QtWidgets.QLabel('This is Label widget for depth frame')
 
         self.button_open_file = QtWidgets.QPushButton("&Open file")
-        self.btnQuit = QtWidgets.QPushButton("&Close app")
+        #self.btnQuit = QtWidgets.QPushButton("&Close app")
         self.button_fast_reverse = QtWidgets.QPushButton("&Fast reverse")
         self.button_fast_reverse.setDisabled(True)
         self.button_play = QtWidgets.QPushButton("&Play video")
@@ -42,7 +42,7 @@ class MyAppWindow(QtWidgets.QWidget):
         self.button_pause.clicked.connect(self.set_pause)
         self.vbox.addWidget(self.button_fast_forward)
         self.button_fast_forward.clicked.connect(self.fast_forward)
-        self.vbox.addWidget(self.btnQuit)
+        #self.vbox.addWidget(self.btnQuit)
         self.setLayout(self.vbox)
         QtWidgets.QApplication.processEvents()
         #self.btnQuit.clicked.connect(QtWidgets.qApp.quit)
@@ -61,7 +61,6 @@ class MyAppWindow(QtWidgets.QWidget):
 
     def read_frame_by_number(self, number_of_frame):
         type = 'color'
-        print('im trying read color frame')
         self.oni.get_frame_by_id(number_of_frame)
         data_img = self.oni.get_frame_by_id(number_of_frame)[0]
         height, width, channel = data_img.shape
@@ -81,14 +80,9 @@ class MyAppWindow(QtWidgets.QWidget):
 
 
     def read_frames(self):
-        print('reading')
-        print(self.frame_item)
         self.limit = (self.oni.get_frames_number())
-        print(f'limit = {self.limit}')
         for i in range(self.frame_item, self.limit + 1, 1):
-            print('Im in cicle')
             if not (self.ToStop):
-                print('im in if')
                 self.read_frame_by_number(i)
                 self.read_depth_frame_by_number(i)
                 self.frame_item += 1
@@ -98,29 +92,22 @@ class MyAppWindow(QtWidgets.QWidget):
 
     def set_frame(self, image, type):
         pix = QtGui.QPixmap(image)
-        print('set frame')
         if type == 'depth' :
             self.depth_image.setPixmap(pix)
         else:
             self.image_frame.setPixmap(pix)
         QtWidgets.QApplication.processEvents()
 
-
-
     def set_frame_slider(self, iter):
         self.frame_slider.setMinimum(0)
         self.frame_slider.setMaximum(self.limit)
         self.frame_slider.setValue(iter)
-        print(f'Текущее положение слайдера {self.frame_slider.value()}')
 
     def go_to_frame(self):
         self.frame_item = self.frame_slider.value()
         self.ToStop = True
         self.button_play.setEnabled(True)
         self.read_frames()
-        #self.read_frame_by_number(self.frame_item)
-        #self.read_depth_frame_by_number(self.frame_item)
-        print(f'My new value = {self.frame_item}')
 
     def fast_reserve(self):
         self.frame_item -= 1
@@ -129,7 +116,8 @@ class MyAppWindow(QtWidgets.QWidget):
 
     def play_video(self):
         self.ToStop = False
-        print(self.ToStop)
+        self.button_fast_forward.setDisabled(True)
+        self.button_fast_reverse.setDisabled(True)
         self.button_pause.setDisabled(False)
         self.button_play.setDisabled(True)
         self.read_frames()

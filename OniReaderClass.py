@@ -10,8 +10,6 @@ class OniReader:
         self.__depth = self.__dev.create_depth_stream()
         self.__number_of_dframes = self.__depth.get_number_of_frames()
     def get_frames_number(self):
-        print(f'Число img кадров {self.__color.get_number_of_frames()}')
-        print(f'Число depth кадров {self.__depth.get_number_of_frames()}')
         return self.__number_of_dframes
     def get_frame_by_id(self, frame_id):
         self.__color.start()
