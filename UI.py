@@ -20,15 +20,15 @@ class MyAppWindow(QtWidgets.QWidget):
         self.button_fast_forward = QtWidgets.QPushButton("Fast forward")
         self.button_fast_forward.setDisabled(True)
         self.vbox = QtWidgets.QVBoxLayout()
-
+        self.hbox = QtWidgets.QHBoxLayout()
+        self.hbox.addWidget(self.image_frame)
+        self.hbox.addWidget(self.depth_image)
         self.frame_slider = QtWidgets.QSlider()
         self.frame_slider.setOrientation(QtCore.Qt.Horizontal)
 
 
         self.imageChange.connect(self.set_frame)
-
-        self.vbox.addWidget(self.image_frame)
-        self.vbox.addWidget(self.depth_image)
+        self.vbox.addLayout(self.hbox)
         self.vbox.addWidget(self.frame_slider)
 
         self.vbox.addWidget(self.button_open_file)
@@ -92,7 +92,7 @@ class MyAppWindow(QtWidgets.QWidget):
 
     def set_frame(self, image, type):
         pix = QtGui.QPixmap(image)
-        if type == 'depth' :
+        if type == 'depth':
             self.depth_image.setPixmap(pix)
         else:
             self.image_frame.setPixmap(pix)
