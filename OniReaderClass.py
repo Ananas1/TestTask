@@ -23,6 +23,6 @@ class OniReader:
         self.__color.stop()
         self.__depth.stop()
         return img, dimg
-    def save_dframe(self,iter, gotten_cframe, gotten_dframe):
+    def save_frame(self,iter, gotten_cframe, gotten_dframe):
         plt.imsave(f"dimg_new_{iter}.png", gotten_dframe)
         plt.imsave(f"img_new_{iter}.png", gotten_cframe)

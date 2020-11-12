@@ -18,6 +18,8 @@ class MyAppWindow(QtWidgets.QWidget):
         self.button_pause = QtWidgets.QPushButton("&Pause")
         self.button_pause.setDisabled(True)
         self.button_fast_forward = QtWidgets.QPushButton("Fast forward")
+        self.button_local_save_fraims= QtWidgets.QPushButton("Save")
+
         self.button_fast_forward.setDisabled(True)
         self.vbox = QtWidgets.QVBoxLayout()
         self.hbox = QtWidgets.QHBoxLayout()
@@ -42,6 +44,8 @@ class MyAppWindow(QtWidgets.QWidget):
         self.button_pause.clicked.connect(self.set_pause)
         self.vbox.addWidget(self.button_fast_forward)
         self.button_fast_forward.clicked.connect(self.fast_forward)
+        self.vbox.addWidget(self.button_local_save_fraims)
+        self.button_local_save_fraims.clicked.connect(self.save_fraims)
         #self.vbox.addWidget(self.btnQuit)
         self.setLayout(self.vbox)
         #QtWidgets.QApplication.processEvents()
@@ -73,11 +77,9 @@ class MyAppWindow(QtWidgets.QWidget):
         self.oni.get_frame_by_id(number_of_frame)
         data_img = self.oni.get_frame_by_id(number_of_frame)[1]
         height, width = data_img.shape
-        #TODO : add normal convert for depth files
         bytesPerLine = 2 * width
         qImage = QtGui.QImage( data_img.data, width, height, bytesPerLine, QtGui.QImage.Format_RGB16)
         self.set_frame(qImage, type)
-
 
     def read_frames(self):
         self.limit = (self.oni.get_frames_number())
@@ -133,3 +135,6 @@ class MyAppWindow(QtWidgets.QWidget):
         self.frame_item += 1
         self.read_frame_by_number(self.frame_item)
         self.read_depth_frame_by_number(self.frame_item)
+
+    def save_fraims(self):
+        self.oni.save_frame(self.frame_item, self.oni.get_frame_by_id(self.frame_item)[0],self.oni.get_frame_by_id(self.frame_item)[1] )
