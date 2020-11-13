@@ -28,12 +28,9 @@ class MyAppWindow(QtWidgets.QWidget):
         self.hbox.addWidget(self.depth_image)
         self.frame_slider = QtWidgets.QSlider()
         self.frame_slider.setOrientation(QtCore.Qt.Horizontal)
-
-
         self.imageChange.connect(self.set_frame)
         self.vbox.addLayout(self.hbox)
         self.vbox.addWidget(self.frame_slider)
-
         self.hbox_buttons.addWidget(self.button_open_file)
         self.button_open_file.clicked.connect(self.open_file)
         self.button_play.setEnabled(False)
@@ -50,8 +47,6 @@ class MyAppWindow(QtWidgets.QWidget):
         self.vbox.addLayout(self.hbox_buttons)
         self.hbox_buttons.addWidget(self.btnQuit)
         self.setLayout(self.vbox)
-
-
         self.btnQuit.clicked.connect(QtWidgets.QApplication.closeAllWindows)
         self.frame_slider.sliderMoved.connect(self.go_to_frame)
         self.show()
@@ -106,6 +101,11 @@ class MyAppWindow(QtWidgets.QWidget):
                 self.read_depth_frame_by_number(i)
                 self.frame_item += 1
                 self.set_frame_slider(i)
+                if self.frame_item == self.limit :
+                    self.frame_item = 0
+                    self.set_frame_slider(self.frame_item)
+                    self.button_play.setEnabled(True)
+                    self.button_pause.setDisabled(True)
             else:
                 break
 
@@ -121,6 +121,7 @@ class MyAppWindow(QtWidgets.QWidget):
         self.frame_slider.setMinimum(0)
         self.frame_slider.setMaximum(self.limit)
         self.frame_slider.setValue(iter)
+
 
     def go_to_frame(self):
         self.frame_item = self.frame_slider.value()
