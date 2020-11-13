@@ -18,10 +18,11 @@ class MyAppWindow(QtWidgets.QWidget):
         self.button_pause = QtWidgets.QPushButton("&Pause")
         self.button_pause.setDisabled(True)
         self.button_fast_forward = QtWidgets.QPushButton("Fast forward")
-        self.button_local_save_fraims= QtWidgets.QPushButton("Save")
-
+        self.button_local_save_frames= QtWidgets.QPushButton("Save frames")
+        self.button_local_save_frames.setDisabled(True)
         self.button_fast_forward.setDisabled(True)
         self.vbox = QtWidgets.QVBoxLayout()
+        self.hbox_buttons = QtWidgets.QHBoxLayout()
         self.hbox = QtWidgets.QHBoxLayout()
         self.hbox.addWidget(self.image_frame)
         self.hbox.addWidget(self.depth_image)
@@ -33,19 +34,20 @@ class MyAppWindow(QtWidgets.QWidget):
         self.vbox.addLayout(self.hbox)
         self.vbox.addWidget(self.frame_slider)
 
-        self.vbox.addWidget(self.button_open_file)
+        self.hbox_buttons.addWidget(self.button_open_file)
         self.button_open_file.clicked.connect(self.open_file)
         self.button_play.setEnabled(False)
-        self.vbox.addWidget(self.button_fast_reverse)
+        self.hbox_buttons.addWidget(self.button_fast_reverse)
         self.button_fast_reverse.clicked.connect(self.fast_reserve)
-        self.vbox.addWidget(self.button_play)
+        self.hbox_buttons.addWidget(self.button_play)
         self.button_play.clicked.connect(self.play_video)
-        self.vbox.addWidget(self.button_pause)
+        self.hbox_buttons.addWidget(self.button_pause)
         self.button_pause.clicked.connect(self.set_pause)
-        self.vbox.addWidget(self.button_fast_forward)
+        self.hbox_buttons.addWidget(self.button_fast_forward)
         self.button_fast_forward.clicked.connect(self.fast_forward)
-        self.vbox.addWidget(self.button_local_save_fraims)
-        self.button_local_save_fraims.clicked.connect(self.save_fraims)
+        self.hbox_buttons.addWidget(self.button_local_save_frames)
+        self.button_local_save_frames.clicked.connect(self.save_frames)
+        self.vbox.addLayout(self.hbox_buttons)
         #self.vbox.addWidget(self.btnQuit)
         self.setLayout(self.vbox)
         #QtWidgets.QApplication.processEvents()
@@ -62,6 +64,7 @@ class MyAppWindow(QtWidgets.QWidget):
                 self.frame_item = 1
                 self.ToStop = False
                 self.button_play.setEnabled(True)
+                self.button_local_save_frames.setEnabled(True)
 
     def read_frame_by_number(self, number_of_frame):
         type = 'color'
@@ -136,5 +139,5 @@ class MyAppWindow(QtWidgets.QWidget):
         self.read_frame_by_number(self.frame_item)
         self.read_depth_frame_by_number(self.frame_item)
 
-    def save_fraims(self):
-        self.oni.save_frame(self.frame_item, self.oni.get_frame_by_id(self.frame_item)[0],self.oni.get_frame_by_id(self.frame_item)[1] )
+    def save_frames(self):
+        self.oni.save_frame(self.frame_item, self.oni.get_frame_by_id(self.frame_item)[0],self.oni.get_frame_by_id(self.frame_item)[1])
