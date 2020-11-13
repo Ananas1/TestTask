@@ -66,14 +66,12 @@ class MyAppWindow(QtWidgets.QWidget):
                 self.ToStop = False
                 self.button_play.setEnabled(True)
                 self.button_local_save_frames.setEnabled(True)
+                self.read_frame_by_number(self.frame_item)
+                self.read_depth_frame_by_number(self.frame_item)
 
     def closeEvent(self, event):
         self.ToStop = True
-        reply = QtWidgets.QMessageBox.question \
-            (self, 'Close app',
-             "Вы уверены, что хотите выйти?",
-              QtWidgets.QMessageBox.Yes,
-             QtWidgets.QMessageBox.No)
+        reply = QtWidgets.QMessageBox.question(self, 'Close app',"Вы уверены, что хотите выйти?", QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
         if reply == QtWidgets.QMessageBox.Yes:
             event.accept()
         else:
