@@ -11,7 +11,7 @@ class MyAppWindow(QtWidgets.QWidget):
         self.depth_image = QtWidgets.QLabel('This is Label widget for depth frame')
 
         self.button_open_file = QtWidgets.QPushButton("&Open file")
-        #self.btnQuit = QtWidgets.QPushButton("&Close app")
+        self.btnQuit = QtWidgets.QPushButton("&Close app")
         self.button_fast_reverse = QtWidgets.QPushButton("&Fast reverse")
         self.button_fast_reverse.setDisabled(True)
         self.button_play = QtWidgets.QPushButton("&Play video")
@@ -48,13 +48,14 @@ class MyAppWindow(QtWidgets.QWidget):
         self.hbox_buttons.addWidget(self.button_local_save_frames)
         self.button_local_save_frames.clicked.connect(self.save_frames)
         self.vbox.addLayout(self.hbox_buttons)
-        #self.vbox.addWidget(self.btnQuit)
+        self.hbox_buttons.addWidget(self.btnQuit)
         self.setLayout(self.vbox)
-        #QtWidgets.QApplication.processEvents()
-        #self.btnQuit.clicked.connect(QtWidgets.qApp.quit)
+
+
+        self.btnQuit.clicked.connect(QtWidgets.QApplication.closeAllWindows)
         self.frame_slider.sliderMoved.connect(self.go_to_frame)
         self.show()
-        #self.frame_slider.sliderReleased(self.go_to_frame)
+
     def open_file(self):
         filename = (QtWidgets.QFileDialog.getOpenFileName(self, 'Open2 Video', "*.oni"))[0]
 
@@ -65,6 +66,21 @@ class MyAppWindow(QtWidgets.QWidget):
                 self.ToStop = False
                 self.button_play.setEnabled(True)
                 self.button_local_save_frames.setEnabled(True)
+
+    def closeEvent(self, event):
+        self.ToStop = True
+        reply = QtWidgets.QMessageBox.question \
+            (self, 'Close app',
+             "Вы уверены, что хотите выйти?",
+              QtWidgets.QMessageBox.Yes,
+             QtWidgets.QMessageBox.No)
+        if reply == QtWidgets.QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore()
+            self.button_play.setEnabled(True)
+            if self.button_pause.isEnabled():
+                self.button_pause.setDisabled(True)
 
     def read_frame_by_number(self, number_of_frame):
         type = 'color'
